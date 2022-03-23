@@ -1,7 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { BiCaretDown, BiCheck, BiSearch } from "react-icons/bi";
 
-export function DropDown() {
+export function DropDown({
+    sortClicked,
+    sortBy,
+    setSortBy,
+    orderBy,
+    setOrderBy,
+}) {
+    if (!sortClicked) {
+        return null;
+    }
     return (
         <div
             className="origin-top-right absolute right-0 mt-2 w-56
@@ -14,41 +23,54 @@ export function DropDown() {
                 aria-labelledby="options-menu"
             >
                 <div
+                    onClick={() => setSortBy("petName")}
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
                     role="menuitem"
                 >
-                    Pet Name <BiCheck />
+                    Pet Name {sortBy === "petName" && <BiCheck />}
                 </div>
                 <div
+                    onClick={() => setSortBy("ownerName")}
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
                     role="menuitem"
                 >
-                    Owner Name <BiCheck />
+                    Owner Name {sortBy === "ownerName" && <BiCheck />}
                 </div>
                 <div
+                    onClick={() => setSortBy("aptDate")}
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
                     role="menuitem"
                 >
-                    Date <BiCheck />
+                    Date {sortBy === "aptDate" && <BiCheck />}
                 </div>
                 <div
+                    onClick={() => setOrderBy("asc")}
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer border-gray-1 border-t-2"
                     role="menuitem"
                 >
-                    Asc <BiCheck />
+                    Asc {orderBy === "asc" && <BiCheck />}
                 </div>
                 <div
+                    onClick={() => setOrderBy("desc")}
                     className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 flex justify-between cursor-pointer"
                     role="menuitem"
                 >
-                    Desc <BiCheck />
+                    Desc {orderBy === "desc" && <BiCheck />}
                 </div>
             </div>
         </div>
     );
 }
 
-export default function Search() {
+export default function Search({
+    setQuery,
+    query,
+    sortBy,
+    setSortBy,
+    orderBy,
+    setOrderBy,
+}) {
+    const [sortClicked, toggleSort] = useState(false);
     return (
         <div className="py-5">
             <div className="mt-1 relative rounded-md shadow-sm">
@@ -57,25 +79,34 @@ export default function Search() {
                     <label htmlFor="query" className="sr-only" />
                 </div>
                 <input
+                    onChange={(event) => setQuery(event.target.value)}
+                    value={query}
                     type="text"
                     name="query"
                     id="query"
-                    value=""
                     className="pl-8 rounded-md focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300"
                     placeholder="Search"
                 />
                 <div className="absolute inset-y-0 right-0 flex items-center">
                     <div>
                         <button
+                            onClick={() => toggleSort(!sortClicked)}
+                            // onBlur={() => toggleSort(false)}
                             type="button"
-                            className="justify-center px-4 py-2 bg-blue-400 border-2 border-blue-400 text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center"
+                            className="justify-center px-4 py-2 bg-blue-400 border-2 border-blue-400 text-sm text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center rounded-r-md"
                             id="options-menu"
                             aria-haspopup="true"
                             aria-expanded="true"
                         >
                             Sort By <BiCaretDown className="ml-2" />
                         </button>
-                        <DropDown />
+                        <DropDown
+                            sortBy={sortBy}
+                            setSortBy={setSortBy}
+                            orderBy={orderBy}
+                            setOrderBy={setOrderBy}
+                            sortClicked={sortClicked}
+                        />
                     </div>
                 </div>
             </div>
